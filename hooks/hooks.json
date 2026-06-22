@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+    ],
+    "userPromptSubmitted": [
+    ],
+    "preToolUse": [
+    ],
+    "postToolUse": [
+    ],
+    "sessionEnd": [
+    ]
+  }
+}
