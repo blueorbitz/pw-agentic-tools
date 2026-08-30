@@ -1,0 +1,19 @@
+{
+  "name": "blueorbitz",
+  "metadata": {
+    "description": "Curated Copilot CLI plugins for our engineering organisation.",
+    "version": "0.1.0",
+    "pluginRoot": "."
+  },
+  "owner": {
+    "name": "Pak Wai"
+  },
+  "plugins": [
+    {
+      "name": "pw-agentic-tools",
+      "description": "Personal productivity tools to work with AI",
+      "version": "0.1.0",
+      "source": "."
+    }
+  ]
+}

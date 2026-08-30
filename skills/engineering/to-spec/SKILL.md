@@ -31,7 +31,7 @@ Create files lazily — only when you have something to write. If no `docs/spec/
 
 Check with the user that these seams match their expectations.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Write the spec using the template below and output according to the file structure above.
 
 <spec-template>
 

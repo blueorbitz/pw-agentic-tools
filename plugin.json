@@ -1,14 +1,14 @@
 {
   "name": "pw-agentic-tools",
   "description": "Personal productivity tools to work with AI",
-  "version": "1.2.0",
+  "version": "0.1.0",
   "author": {
-    "name": "Pak Wai",
-    "email": "dev@choong.pw"
+    "name": "Pak Wai"
   },
   "license": "MIT",
-  "keywords": [],
-  "agents": "agents/",
-  "skills": ["skills/"],
-  "hooks": "hooks.json"
+  "category": "productivity",
+  "keywords": ["productivity", "tools"],
+  "agents": ["./agents"],
+  "skills": ["./skills/engineering", "./skills/productivity"],
+  "hooks": "./hooks/hooks.json"
 }

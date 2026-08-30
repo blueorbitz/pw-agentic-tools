@@ -1,11 +1,13 @@
 ---
 name: unslop
-description: Cut AI tells from any writing. Must always apply.
+description: Cut AI tells from prose. Must always apply to prose, never code.
 ---
 
 # Unslop
 
-Edit text to remove AI patterns and add human voice.
+Edit prose to remove AI patterns and add human voice.
+
+Never apply this skill to code or alter code to satisfy its rules. Preserve fenced and inline code, commands, identifiers, file paths, configuration, structured data, regular expressions, syntax, and formatting exactly as written. The skill may rewrite prose inside code comments, but it must preserve comment markers, indentation, line wrapping, and all other formatting.
 
 ## Process
 
