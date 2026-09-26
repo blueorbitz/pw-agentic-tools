@@ -6,6 +6,17 @@
     "userPromptSubmitted": [
     ],
     "preToolUse": [
+      {
+        "type": "command",
+        "matcher": "view|bash|powershell|grep",
+        "bash": "./hooks/scripts/block-env.sh",
+        "powershell": "./hooks/scripts/block-env.ps1",
+        "cwd": ".",
+        "timeoutSec": 5,
+        "env": {
+          "ENV_BLOCK_REASON": "Reading .env files is blocked by policy. Read .env.example for the variable names, or ask the user for the values."
+        }
+      }
     ],
     "postToolUse": [
     ],
