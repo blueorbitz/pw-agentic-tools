@@ -1,5 +1,5 @@
-# Blocks agent reads of .env and its variants (view tool + shell commands),
-# while allowing anything containing ".example" (.env.example, ...).
+# Blocks agent reads of .env and its variants, while allowing .env filenames
+# that contain "example" (such as .env.example).
 #
 # Supports: GitHub Copilot, Claude Code, Command Code, OpenCode hook payloads.
 # Dependency-free: built into Windows PowerShell 5.1+. No modules required.
@@ -44,31 +44,37 @@ if ($toolArgsRaw) {
 
 $target = ''
 switch -Regex ($toolName) {
-  '^(view|read|read_file|grep)$' {
-    foreach ($key in @('path', 'file_path', 'absolute_path', 'filePath', 'pattern', 'query')) {
+  '^(view|read|read_file)$' {
+    foreach ($key in @('path', 'file_path', 'absolute_path', 'filePath')) {
       if ($argsObj.ContainsKey($key) -and $argsObj[$key]) { $target = [string]$argsObj[$key]; break }
     }
-    # Also scan command for grep tool (grep can be called via shell)
-    if ($toolName -eq 'grep' -and -not $target) {
-      foreach ($key in @('command', 'args')) {
-        if ($argsObj.ContainsKey($key) -and $argsObj[$key]) { $target = [string]$argsObj[$key]; break }
-      }
+  }
+  '^grep$' {
+    foreach ($key in @('path', 'paths', 'file_path', 'absolute_path', 'filePath')) {
+      if ($argsObj.ContainsKey($key) -and $argsObj[$key]) { $target = [string]$argsObj[$key]; break }
     }
   }
   '^(bash|powershell|shell|shell_command)$' {
     if ($argsObj.ContainsKey('command') -and $argsObj['command']) { $target = [string]$argsObj['command'] }
+    if ($target -and $target -notmatch '(?i)(^|[;&|()\s])(Get-Content|gc|cat|head|tail|less|more|sed|awk|grep|rg|Select-String|source|python|node|ruby|perl|php|jq|yq|dd|strings|wc|sha256sum|shasum|md5sum|base64|Format-Hex|od|cmp|diff|Copy-Item|cp|file)(\s|$)|(^|[;&|]\s*)git\s+(show|diff)(\s|$)|(^|[;&|()]\s*)\.\s') {
+      exit 0
+    }
   }
 }
 if (-not $target) { exit 0 }
 
-# ── Allowlist ──────────────────────────────────────────────────────────
-# ".example" anywhere marks a safe template (PS -match is case-insensitive).
-if ($target -match '\.example') { exit 0 }
+function Test-BlockedEnvReference([string]$value) {
+  foreach ($token in ($value -split '[\s;&|<>()]')) {
+    $filename = ($token -split '[/\\]')[-1].ToLowerInvariant()
+    if ($filename -match '(^|[^a-z0-9])\.env([^a-z0-9]|$)' -and $filename -notmatch 'example') {
+      return $true
+    }
+  }
+  return $false
+}
 
-# ── Deny ───────────────────────────────────────────────────────────────
-# Match a ".env" token or variant (.env.local, .env.production, .env-backup).
-# Boundary is any non-alphanumeric (or end) on each side.
-if ($target -match '(^|[^a-z0-9])\.env([/._-]|$)') {
+if (Test-BlockedEnvReference $target) {
+  # ── Deny ─────────────────────────────────────────────────────────────
   $reason = $env:ENV_BLOCK_REASON
   if (-not $reason) { $reason = 'Reading .env files is blocked by policy. Read .env.example for the variable names, or ask the user for the values.' }
   $reason = $reason.Replace('\', '\\').Replace('"', '\"')
