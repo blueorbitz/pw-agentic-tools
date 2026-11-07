@@ -1,6 +1,7 @@
 ---
 name: deep-research
 description: Conduct iterative deep research on complex questions by decomposing into sub-questions, searching multiple free sources via sub-agents, triangulating evidence with credibility-weighted conflict resolution, and synthesizing a cited report with clear conclusions and open questions. Use when the user asks for deep research, comprehensive analysis, literature review, or "research this thoroughly" — adaptive depth, free search APIs, login-wall access, sub-agent parallelism.
+disable-model-invocation: true
 ---
 
 # deep-research
