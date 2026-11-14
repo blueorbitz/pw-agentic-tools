@@ -4,6 +4,13 @@ Setup instructions for using the `.env` blocking hook with Claude Code, Command 
 
 For GitHub Copilot, see the main [README](../README.md).
 
+Copilot loads this hook through the installed agent plugin and supplies
+`COPILOT_PLUGIN_ROOT` so the script path does not depend on the open project.
+Do not also register `hooks/hooks.json` as a standalone hook. If you need a
+standalone configuration instead, copy it and replace the `bash` and
+`powershell` script paths with quoted absolute paths to your local scripts.
+Start a new chat after changing hook configuration.
+
 ---
 
 ## Claude Code

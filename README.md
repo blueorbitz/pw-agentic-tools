@@ -20,8 +20,9 @@ Personal productivity tools to work with AI.
   - Add `~/<path_to>/pw-agentic-tools/prompts`
 4. Go to settings, `chat.instructionsFilesLocations`
   - Add `~/<path_to>/pw-agentic-tools/instructions`
-5. Go to settings, `chat.hookFilesLocations`
-  - Add `~/<path_to>/pw-agentic-tools/hooks`
+
+The agent plugin loads its hooks automatically. Do not also add its hooks to
+`chat.hookFilesLocations`, as that can run the hook twice.
 
 ## Hooks
 
@@ -29,10 +30,14 @@ Personal productivity tools to work with AI.
 
 A `preToolUse` hook prevents agents from reading secret environment files.
 
-- **Blocked**: `.env` and variants (`.env.local`, `.env.production`, `.env.test`, ...), plus shell commands that read them (e.g. `cat .env`).
-- **Allowed**: anything containing `.example` (e.g. `.env.example`), plus non-secret files like `.envrc` and `foo.env`.
+- **Blocked**: direct reads of `.env` and variants (`.env.local`, `.env.production`, `.env.test`, ...) through file-read tools and common shell readers (e.g. `cat .env`).
+- **Allowed**: `.env` filenames containing `example` (e.g. `.env.example`), non-secret files like `.envrc` and `foo.env`, and commands that only list filenames or metadata.
 
 The agent is told to read `.env.example` for the variable names or ask you for the values.
+
+The hook uses `COPILOT_PLUGIN_ROOT`, supplied by Copilot, to find its script
+inside the plugin even when another project is open. After changing the hook,
+start a new chat so Copilot loads the updated configuration.
 
 To disable this hook, remove the `preToolUse` entry from `hooks/hooks.json` (or set `"disableAllHooks": true` at the top of the file).
 
